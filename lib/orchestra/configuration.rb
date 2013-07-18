@@ -1,15 +1,42 @@
+require 'orchestra/logging'
+require 'orchestra/namespace'
+require 'orchestra/environment'
+
 module Orchestra
+
   class Configuration
 
-    attr_accessor :options, :namespaces
+    include Logging
+
+    attr_accessor :options
 
     def initialize
       @environments = {}
-      @namespaces = { :default => Namespace.new }
+      @namespaces = { :default => Namespace.new('default') }
       @options = {}
 
+      load
       #read_files - instance_eval them in the context of here
+    end
 
+    def load
+      Dir.glob("environments/**/*.rb").select do |filename|
+        environment_id = filename.gsub(/^environments\//, '')
+        environment_id.gsub!(/\//, '::')
+        environment_id.gsub!(/\.rb$/, '')
+        @environments[environment_id] = Environment.from_rbfile( filename, environment_id )
+      end
+
+      Dir.glob("tasks/**/*.rb").select do |filename|
+        namespace_id = filename.gsub(/^tasks\//, '')
+        namespace_id.gsub!(/\//, '::')
+        namespace_id.gsub!(/\.rb$/, '')
+        @namespaces[namespace_id] = Namespace.from_rbfile( filename, namespace_id )
+      end
+    end
+
+    def namespaces
+      @namespaces.values
     end
 
     def environment id, *args, &setup_block

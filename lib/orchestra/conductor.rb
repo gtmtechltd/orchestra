@@ -1,20 +1,26 @@
 require 'trollop'
-require 'log4r'
+require 'orchestra/configuration'
+require 'orchestra/logging'
+
 include Log4r
 
 module Orchestra
+
   class Conductor
+
+    include Logging
 
     attr_reader :configuration
 
     def initialize
+
       @configuration = Configuration.new
-      @logger = Logger.new 'stdout'
-      @logger.outputters = Outputter.stdout
     end
 
     def perform symphony
       @configuration.options.merge symphony[:options]
+
+      puts "\nThe conductor has entered the stage. ** APPLAUSE **\n"
 
       if symphony[:options][:listtasks]
         listtasks
@@ -25,8 +31,11 @@ module Orchestra
 
     def listtasks
       helptext = "Available tasks\n\n"
-      @configuration.namespaces.collect {|namespace| namespace.tasks}.each do |task|
-        helptext += "#{task.summary}\n" unless task.summary.nil?
+      @configuration.namespaces.each do |namespace|
+        logger.debug "Added new namespace (#{namespace.id})"
+        namespace.tasks.each do |task|
+          helptext += "#{task.summary}\n" unless task.summary.nil?
+        end
       end
       logger.info helptext
     end

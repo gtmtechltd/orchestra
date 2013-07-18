@@ -1,5 +1,13 @@
+require 'orchestra/logging'
+require 'orchestra/DSL'
+require 'orchestra/Role'
+require 'orchestra/Server'
+
 module Orchestra
-  class Environment
+
+  class Environment < DSL
+
+    include Logging
     
     attr_reader :id
 
@@ -18,20 +26,25 @@ module Orchestra
       properties[property_name] = property_value
     end
 
-    def server(server_name, host, options)
-      servers[server_name] = options
+    def server *args, &block
+      server_id = args.shift
+
+      @servers[ server_id ] = Server.from_block( server_id, *args, &block )
     end
  
-    def role *args
-      name = args.shift
+    def role *args, &block
+      role_id = args.shift
 
-      options = {}
-      options.merge args.pop if args.last.is_a(Hash)
-     
-      servers = args
-
-      @roles[:name] = {:servers => servers, :options => options}
+      @roles[ role_id ] = Role.from_block( role_id, *args, &block )
     end 
+
+    protected
+
+    def servers
+      @servers.values
+    end
+
+
 
   end
 end

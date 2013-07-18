@@ -1,15 +1,22 @@
+require 'orchestra/logging'
+require 'orchestra/DSL'
+
 module Orchestra
-  class Task
+
+  class Task < DSL
+
+    include Logging
 
     attr_reader :id, :user
 
     def initialize id, *args
       @id = id
-      @user ||= options[:user]
-      @method ||= options[:method]
-      @description ||= options[:description]
-      @namespace ||= options[:namespace]
-      @private ||= options[:private]
+      # @user ||= options[:user]
+      # @method ||= options[:method]
+      # @description ||= options[:description]
+      # @namespace ||= options[:namespace]
+      # @private ||= options[:private]
+      logger.debug "Added new task (#{id})"
     end
 
     # def method_missing

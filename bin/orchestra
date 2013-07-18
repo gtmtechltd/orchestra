@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
 
 require 'orchestra/CLI'
+require 'orchestra/Conductor'
+require 'orchestra/abort_error'
 
-conductor = Orchestra::Conductor.new
-conductor.perform Orchestra::CLI.parse
+begin
+  conductor = Orchestra::Conductor.new
+  conductor.perform Orchestra::CLI.parse
+rescue Orchestra::AbortError
+  puts "\nThe conductor has stormed off the stage.\n\n"
+end

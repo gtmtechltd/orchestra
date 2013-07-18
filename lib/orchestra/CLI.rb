@@ -1,25 +1,30 @@
 require 'trollop'
+require 'orchestra/version'
 
-class CLI
+module Orchestra
 
-  def self.parse
+  class CLI
 
-    options = Trollop::options do
-  
-      version "orchestra 1.0"
-      banner <<-EOS
-Orchestra is a platform-wide automated deployment orchestration tool. 
+    def self.parse
 
-      EOS
-     
-      opt :quiet, "Less verbose output", :short => 'q'
-      opt :dryrun, "Dry run, dont actually do anything", :short => 'n'
-      opt :listtasks, "List tasks", :short => 'l'
+      options = Trollop::options do
+    
+        version "Orchestra version " + VERSION.to_s
+        banner <<-EOS
+  Orchestra is a platform-wide automated deployment orchestration tool. 
 
+        EOS
+       
+        opt :quiet, "Less verbose output", :short => 'q'
+        opt :dryrun, "Dry run, dont actually do anything", :short => 'n'
+        opt :listtasks, "List tasks", :short => 'l'
+
+      end
+
+      return { :options => options, :tasks => ARGV }
+    
     end
 
-    return { :options => options, :tasks => ARGV }
-  
   end
 
 end

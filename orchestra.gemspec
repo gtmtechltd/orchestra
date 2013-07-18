@@ -19,5 +19,5 @@ ss complex systems with predefined orders and dependencies"
   gem.require_paths = ["lib"]
 
   gem.add_dependency('trollop', '>=2.0')
-  gem.add_dependency('log4r', '>=1.1.10')
+  gem.add_dependency('log4r-color', '>=1.2.2')
 end
