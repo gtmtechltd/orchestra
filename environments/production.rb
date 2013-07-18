@@ -1,12 +1,12 @@
-role :app, "usrwap01.nowtv.bskyb.vagrant", "usrwap02.nowtv.bskyb.vagrant" do
-  option :ssh_access_via => "gateway.nowtv.bskyb.vagrant"
+role :app, "webapp01.example.com.vagrant", "webapp02.example.com.vagrant" do
+  option :ssh_access_via => "gateway.example.com.vagrant"
   option :ssh_key => "id_rsa.2"
 end
 
-role :web, "dmz01.nowtv.bskyb.vagrant", "dmz02.nowtv.bskyb.vagrant"
+role :web, "dmz01.example.com.vagrant", "dmz02.example.com.vagrant"
 
-server "gateway.nowtv.bskyb.vagrant" do
-  option :ssh_access_via => "firewall.nowtv.bskyb.vagrant"
+server "gateway.example.com.vagrant" do
+  option :ssh_access_via => "firewall.example.com.vagrant"
 end
 
 servers.each do |server|
@@ -18,14 +18,14 @@ production.YAML >>
 roles:
   app:
     servers:
-      usrwap01.nowtv.bskyb.vagrant
-      usrwap02.nowtv.bskyb.vagrant
+      webapp01.example.com.vagrant
+      webapp02.example.com.vagrant
     options:
-      ssh_access_via: gateway.nowtv.bskyb.vagrant
+      ssh_access_via: gateway.example.com.vagrant
       ssh_key: id_rsa.2
   web:
     servers:
-      dms01.nowtv.bskyb.vagrant
+      dms01.example.com.vagrant
 
 servers:
   DEFAULT:
